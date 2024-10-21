@@ -41,8 +41,8 @@ func main() {
 	if err != nil {
 		panic("Failed Connect to Database!")
 	}
-	fmt.Println("Success Connect to Database!")
-
+	fmt.Println("Success Connect to Database!") 
+ 
 	http.HandleFunc("/", handleIndex)
 	http.HandleFunc("/categories", func(w http.ResponseWriter, r * http.Request) {
 		handleCategories(w, r, db)
