@@ -78,12 +78,19 @@ func handleEditCategory(w http.ResponseWriter, r * http.Request, db * gorm.DB) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"message": "Category updated successfully"})
+	json.NewEncoder(w).Encode(map[string]string{"id":id, "message": "Category updated successfully"})
 }
 
 func handleDeleteCategory(w http.ResponseWriter, r * http.Request, db * gorm.DB) {
 	id := r.PathValue("id")
-	fmt.Fprintf(w, "Updating category with ID: %s", id)
+
+	if result := db.Where("id = ?", id).Delete(&Category{}); result.Error != nil {
+		http.Error(w, "Failed to delete category", http.StatusInternalServerError)
+    	return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"id":id,"message": "Category deleted successfully"})
 }
 
 func main() {
